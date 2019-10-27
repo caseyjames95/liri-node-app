@@ -1,0 +1,27 @@
+{
+  "name": "liri",
+  "version": "1.0.0",
+  "description": "Outputs movies and concerts",
+  "main": "liri.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/caseyjames95/liri-node-app.git"
+  },
+  "keywords": [
+    "liri",
+    "concert",
+    "movies"
+  ],
+  "author": "Casey",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/caseyjames95/liri-node-app/issues"
+  },
+  "homepage": "https://github.com/caseyjames95/liri-node-app#readme",
+  "dependencies": {
+    "axios": "^0.19.0"
+  }
+}
