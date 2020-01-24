@@ -1,13 +1,17 @@
 // Dotenv
 require("dotenv").config();
 
+// FS File
+const fs = require('fs')
+
 // NPM 
 const axios = require('axios')
 const moment = require('moment')
 moment().format()
-const keys = require("./key.js");
+const keys = require("./keys.js");
 // API
-const spotify = require('spotify')
+const Spotify = require('node-spotify-api')
+const spotify = new Spotify(keys.spotify)
 
 // Process arguments
 let search = process.argv[2]
@@ -40,7 +44,6 @@ Event Date: ${eventDate}
                 };
             })
             .catch(function (error) {
-                // handle error
                 console.log(error);
             })
 
@@ -50,18 +53,12 @@ Event Date: ${eventDate}
 
     // SPOTIFY THIS
     case 'spotify-this': {
-        if (!item) {
-            song = 'The Sign';
-        } else {
-            song = item;
-        }
-
+        song = item;
         spotify.search({ type: 'track', query: song }, function (err, data) {
             if (err) {
 
                 return console.log('Error occurred: ' + err);
             }
-            console.log(song)
             let artist_object = data.tracks.items[0];
             console.log(`=========================================
 Artist: ${artist_object.artists[0].name}
@@ -77,21 +74,13 @@ Sample: ${artist_object.preview_url}
 
     // MOVIE THIS
     case 'movie-this': {
-        if (!title) {
-            movie = 'Mr.Nobody';
-        } else {
-            movie = title;
-        }
+        movie = item;
+
         let url2 = `http://www.omdbapi.com/?apikey=trilogy&t=${movie}`
         axios.get(url2)
             .then(function (response) {
-
-                // handle success
-
-
                 let movie_info = response.data;
-                console.log(`
-*----------------------------------*
+                console.log(`=========================================
 Title: ${movie_info.Title}
 Year Released: ${movie_info.Released}
 IMDB Rating: ${movie_info.Ratings[0].Value}
@@ -100,7 +89,7 @@ Countries Produced: ${movie_info.Country}
 Language: ${movie_info.Language}
 Plot: ${movie_info.Plot}
 Actors: ${movie_info.Actors}
-*----------------------------------*
+=========================================
 `)
             })
             .catch(function (error) {
@@ -121,7 +110,7 @@ Actors: ${movie_info.Actors}
                 content = data.split(",");
                 command = content[0];
                 title = content[1];
-                song = title;
+                song = item;
                 spotify.search({ type: 'track', query: song }, function (err, data) {
                     if (err) {
 
@@ -129,13 +118,12 @@ Actors: ${movie_info.Actors}
                     }
                     console.log(song)
                     let artist_object = data.tracks.items[0];
-                    console.log(`
-*------------------------------------*
+                    console.log(`=========================================
 Artist: ${artist_object.artists[0].name}
 Song Name: ${artist_object.name}
 Preview Link: ${artist_object.preview_url}
 Album Name: ${artist_object.album.name}
-*------------------------------------*
+=========================================
 `
                     );
                 });
